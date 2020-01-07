@@ -8,7 +8,7 @@ if (!String.format) {
 }
 
 let input, nickname, badges, orbs, titles;
-let missingCounter;
+let wiki = { "badges": null, "orbs": null };
 
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
 const hastebinUrl = corsUrl + "https://hastebin.com/raw/";
@@ -31,6 +31,15 @@ async function getInfoFromHastebin(code)
 	return playerData;
 }
 
+async function getWiki()
+{
+	wiki["badges"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Badges");
+	wiki["badges"] = await wiki["badges"].text();
+
+	wiki["orbs"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Cartouches");
+	wiki["orbs"] = await wiki["orbs"].text();
+}
+
 async function search()
 {
 	let data = await getInfoFromHastebin(input.value);
@@ -40,7 +49,6 @@ async function search()
 		nickname.innerText = "Invalid code";
 		return;
 	}
-	missingCounter = { "badges": 0, "orbs": 0 };
 
 	nickname.innerText = data.nickname;
 
@@ -49,16 +57,9 @@ async function search()
 	populateTitles(data.titles);
 }
 
-function invalidImage(obj, objType)
-{
-	obj.style.display = "none";
-	missingCounter[objType]--;
-}
+const image = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
 
-const image = "<img src=\"{0}\" alt=\"{1}\" onerror=\"invalidImage(this, '{2}')\" class=\"small-image\" />"
-
-const badgeImg = String.format(image, "http://www.transformice.com/images/x_transformice/x_badges/x_{0}.png");
-const orbScrapper = corsUrl + "https://transformice.fandom.com/wiki/Cartouches";
+const badgeUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Badge_{0}\.png";
 const orbUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
 const counter = "<span class=\"counter\">Total: {0}</span><br><br>";
@@ -71,52 +72,54 @@ function startBox(obj)
 	obj.innerHTML = '';
 }
 
+function getBadgeUrl(id)
+{
+	return wiki["badges"].match(String.format(badgeUrl, id));
+}
+
 async function populateBadges(playerBadges)
 {
 	startBox(badges);
 
-	let badge;
-	for (badge = 0; badge < 74; badge++)
-		if (!playerBadges[badge])
+	let missingCounter = 0;
+
+	let badge, url;
+	for (badge = 0; badge < 350; badge++)
+		if (badge != 162 && !playerBadges[badge]) // 162 == 163
 		{
-			missingCounter["badges"]++;
-			badges.innerHTML += String.format(badgeImg, badge, badge, "badges");
+			url = getBadgeUrl(badge);
+			if (!url) continue;
+
+			missingCounter++;
+			badges.innerHTML += String.format(image, url[0], badge);
 		}
 
-	for (badge = 120; badge < 350; badge++)
-		if (badge != 162 && !playerBadges[badge])
-		{
-			missingCounter["badges"]++;
-			badges.innerHTML += String.format(badgeImg, badge, badge, "badges");
-		}
-
-	badges.innerHTML = String.format(counter, missingCounter["badges"]) + badges.innerHTML;
+	badges.innerHTML = String.format(counter, missingCounter) + badges.innerHTML;
 }
 
-function getOrbUrl(wiki, id)
+function getOrbUrl(id)
 {
-	return wiki.match(String.format(orbUrl, id));
+	return wiki["orbs"].match(String.format(orbUrl, id));
 }
 
 async function populateOrbs(playerOrbs)
 {
-	let wikiOrbs = await fetch(orbScrapper);
-	wikiOrbs = await wikiOrbs.text();
-
 	startBox(orbs);
+
+	let missingCounter = 0;
 
 	let orb, url;
 	for (orb = 1; orb < 100; orb++)
 		if (!playerOrbs[orb])
 		{
-			url = getOrbUrl(wikiOrbs, orb);
+			url = getOrbUrl(orb);
 			if (!url) continue;
 
-			missingCounter["orbs"]++;
-			orbs.innerHTML += String.format(image, url[0], orb, "orbs");
+			missingCounter++;
+			orbs.innerHTML += String.format(image, url[0], orb);
 		}
 
-	orbs.innerHTML = String.format(counter, missingCounter["orbs"]) + orbs.innerHTML;
+	orbs.innerHTML = String.format(counter, missingCounter) + orbs.innerHTML;
 }
 
 function populateTitles(playersObtainableTitles)
@@ -133,4 +136,6 @@ window.onload = function()
 	badges = document.getElementById("badges");
 	orbs = document.getElementById("orbs");
 	titles = document.getElementById("titles");
+
+	getWiki();
 }
