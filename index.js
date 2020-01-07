@@ -42,6 +42,8 @@ async function getWiki()
 
 async function search()
 {
+	if (!(wiki["badges"] && wiki["orbs"])) return;
+
 	let data = await getInfoFromHastebin(input.value);
 
 	if (!data.success)
@@ -59,7 +61,7 @@ async function search()
 
 const image = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
 
-const badgeUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Badge_{0}\.png";
+const badgeUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/{1}Badge_{0}\.png";
 const orbUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
 const counter = "<span class=\"counter\">Total: {0}</span><br><br>";
@@ -72,9 +74,9 @@ function startBox(obj)
 	obj.innerHTML = '';
 }
 
-function getBadgeUrl(id)
+function getBadgeUrl(id, prefix)
 {
-	return wiki["badges"].match(String.format(badgeUrl, id));
+	return wiki["badges"].match(String.format(badgeUrl, id, prefix));
 }
 
 async function populateBadges(playerBadges)
@@ -84,10 +86,18 @@ async function populateBadges(playerBadges)
 	let missingCounter = 0;
 
 	let badge, url;
+	let isSurv, isRacing;
+
 	for (badge = 0; badge < 350; badge++)
 		if (badge != 162 && !playerBadges[badge]) // 162 == 163
 		{
-			url = getBadgeUrl(badge);
+			isSurv = (badge >= 120 && badge <= 123);
+			isRacing = (badge >= 124 && badge <= 127);
+
+			url = getBadgeUrl(
+				(isSurv ? (badge - 119) : (isRacing ? (badge - 123) : badge)),
+				(isSurv ? "Surv_" : (isRacing ? "Racing_" : ''))
+			);
 			if (!url) continue;
 
 			missingCounter++;
