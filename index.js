@@ -18,7 +18,7 @@ async function getInfoFromHastebin(code)
 
 	try
 	{
-		let body = await fetch(hastebinUrl + code + ".md");
+		let body = await fetch(hastebinUrl + code);
 		playerData = await JSON.parse(body.text());
 	}
 	catch(err)
