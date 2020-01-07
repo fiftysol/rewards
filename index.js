@@ -7,7 +7,8 @@ if (!String.format) {
 	};
 }
 
-var input, nickname, badges, orbs, titles;
+let input, nickname, badges, orbs, titles;
+let missingCounter;
 
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
 const hastebinUrl = corsUrl + "https://hastebin.com/raw/";
@@ -39,6 +40,8 @@ async function search()
 		nickname.innerText = "Invalid code";
 		return;
 	}
+	missingCounter = { "badges": 0, "orbs": 0 };
+
 	nickname.innerText = data.nickname;
 
 	populateBadges(data.badges);
@@ -46,8 +49,13 @@ async function search()
 	populateTitles(data.titles);
 }
 
-const image = "<img src=\"{0}\" alt=\"{1}\" onerror=\"this.style.display='none'\" />"
-const image2 = "<img src=\"{0}\" alt=\"{1}\" onerror=\"this.style.display='none'\" width=\"50px\" />"
+function invalidImage(obj, objType)
+{
+	obj.style.display = "none";
+	missingCounter[objType]--;
+}
+
+const image = "<img src=\"{0}\" alt=\"{1}\" onerror=\"invalidImage(this, {2})\" class=\"small-image\" />"
 
 const badgeImg = String.format(image, "http://www.transformice.com/images/x_transformice/x_badges/x_{0}.png");
 const orbScrapper = corsUrl + "https://transformice.fandom.com/wiki/Cartouches";
@@ -67,24 +75,22 @@ async function populateBadges(playerBadges)
 {
 	startBox(badges);
 
-	let missing = 0;
-
 	let badge;
 	for (badge = 0; badge < 74; badge++)
 		if (!playerBadges[badge])
 		{
-			missing++;
-			badges.innerHTML += String.format(badgeImg, badge);
+			missingCounter["badges"]++;
+			badges.innerHTML += String.format(badgeImg, badge, badge, "badges");
 		}
 
 	for (badge = 120; badge < 350; badge++)
 		if (badge != 162 && !playerBadges[badge])
 		{
-			missing++;
-			badges.innerHTML += String.format(badgeImg, badge);
+			missingCounter["badges"]++;
+			badges.innerHTML += String.format(badgeImg, badge, badge, "badges");
 		}
 
-	badges.innerHTML = String.format(counter, missing) + badges.innerHTML;
+	badges.innerHTML = String.format(counter, missingCounter["badges"]) + badges.innerHTML;
 }
 
 function getOrbUrl(wiki, id)
@@ -99,8 +105,6 @@ async function populateOrbs(playerOrbs)
 
 	startBox(orbs);
 
-	let missing = 0;
-
 	let orb, url;
 	for (orb = 1; orb < 100; orb++)
 		if (!playerOrbs[orb])
@@ -108,11 +112,11 @@ async function populateOrbs(playerOrbs)
 			url = getOrbUrl(wikiOrbs, orb);
 			if (!url) continue;
 
-			missing++;
-			orbs.innerHTML += String.format(image2, url[0], orb);
+			missingCounter["orbs"]++;
+			orbs.innerHTML += String.format(image, url[0], orb, "orbs");
 		}
 
-	orbs.innerHTML = String.format(counter, missing) + orbs.innerHTML;
+	orbs.innerHTML = String.format(counter, missingCounter["orbs"]) + orbs.innerHTML;
 }
 
 function populateTitles(playersObtainableTitles)
