@@ -88,7 +88,7 @@ async function populateOrbs(playerOrbs)
 	startBox(orbs);
 
 	let orb, url;
-	for (orb = 0; orb < 100; orb++)
+	for (orb = 1; orb < 100; orb++)
 		if (!playerOrbs[orb])
 		{
 			url = getOrbUrl(wikiOrbs, orb);
