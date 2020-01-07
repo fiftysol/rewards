@@ -53,6 +53,8 @@ const badgeImg = String.format(image, "http://www.transformice.com/images/x_tran
 const orbScrapper = corsUrl + "https://transformice.fandom.com/wiki/Cartouches";
 const orbUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
+const counter = "<span class=\"counter\">Total: {0}</span><br><br>";
+
 function startBox(obj)
 {
 	if (!obj.classList.contains("visible"))
@@ -65,14 +67,24 @@ async function populateBadges(playerBadges)
 {
 	startBox(badges);
 
+	let missing = 0;
+
 	let badge;
 	for (badge = 0; badge < 74; badge++)
 		if (!playerBadges[badge])
+		{
+			missing++;
 			badges.innerHTML += String.format(badgeImg, badge);
+		}
 
 	for (badge = 120; badge < 350; badge++)
 		if (badge != 162 && !playerBadges[badge])
+		{
+			missing++;
 			badges.innerHTML += String.format(badgeImg, badge);
+		}
+
+	badges.innerHTML = String.format(counter, missing) + badges.innerHTML;
 }
 
 function getOrbUrl(wiki, id)
@@ -87,6 +99,8 @@ async function populateOrbs(playerOrbs)
 
 	startBox(orbs);
 
+	let missing = 0;
+
 	let orb, url;
 	for (orb = 1; orb < 100; orb++)
 		if (!playerOrbs[orb])
@@ -94,15 +108,18 @@ async function populateOrbs(playerOrbs)
 			url = getOrbUrl(wikiOrbs, orb);
 			if (!url) continue;
 
+			missing++;
 			orbs.innerHTML += String.format(image2, url[0], orb);
 		}
+
+	orbs.innerHTML = String.format(counter, missing) + orbs.innerHTML;
 }
 
 function populateTitles(playersObtainableTitles)
 {
 	startBox(titles);
 
-	titles.innerText = "«" + playersObtainableTitles.sort().join("»\n«") + "»";
+	titles.innerHTML = String.format(counter, playersObtainableTitles.length) + "<span class=\"title\">«" + playersObtainableTitles.sort().join("»\n«") + "»</span>";
 }
 
 window.onload = function()
