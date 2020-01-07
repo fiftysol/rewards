@@ -119,7 +119,7 @@ function populateTitles(playersObtainableTitles)
 {
 	startBox(titles);
 
-	titles.innerHTML = String.format(counter, playersObtainableTitles.length) + "<span class=\"title\">«" + playersObtainableTitles.sort().join("»\n«") + "»</span>";
+	titles.innerHTML = String.format(counter, playersObtainableTitles.length) + "<span class=\"title\">«" + playersObtainableTitles.sort().join("»<br>«") + "»</span>";
 }
 
 window.onload = function()
