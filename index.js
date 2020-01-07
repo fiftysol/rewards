@@ -19,7 +19,8 @@ async function getInfoFromHastebin(code)
 	try
 	{
 		let body = await fetch(hastebinUrl + code);
-		playerData = await JSON.parse(body.text());
+		body = await body.text()
+		playerData = await JSON.parse(body);
 	}
 	catch(err)
 	{
@@ -64,13 +65,13 @@ async function populateBadges(playerBadges)
 {
 	startBox(badges);
 
-	let badge = 0;
+	let badge;
 	for (badge = 0; badge < 74; badge++)
 		if (!playerBadges[badge])
 			badges.innerHTML += String.format(badgeImg, badge);
 
 	for (badge = 120; badge < 350; badge++)
-		if (!playerBadges[badge])
+		if (badge != 162 && !playerBadges[badge])
 			badges.innerHTML += String.format(badgeImg, badge);
 }
 
@@ -86,7 +87,7 @@ async function populateOrbs(playerOrbs)
 
 	startBox(orbs);
 
-	let orb = 0, url;
+	let orb, url;
 	for (orb = 0; orb < 100; orb++)
 		if (!playerOrbs[orb])
 		{
@@ -101,7 +102,7 @@ function populateTitles(playersObtainableTitles)
 {
 	startBox(titles);
 
-	titles.innerText = "«" + playersObtainableTitles.join("»\n«") + "»";
+	titles.innerText = "«" + playersObtainableTitles.sort().join("»\n«") + "»";
 }
 
 window.onload = function()
