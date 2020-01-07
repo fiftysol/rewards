@@ -27,3 +27,7 @@
 	color: #FFFFFF;
 	font-size: 2em;
 }
+
+.small-image {
+	max-width: 50px;
+}
