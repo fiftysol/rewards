@@ -55,7 +55,7 @@ function invalidImage(obj, objType)
 	missingCounter[objType]--;
 }
 
-const image = "<img src=\"{0}\" alt=\"{1}\" onerror=\"invalidImage(this, \"{2}\")\" class=\"small-image\" />"
+const image = "<img src=\"{0}\" alt=\"{1}\" onerror=\"invalidImage(this, '{2}')\" class=\"small-image\" />"
 
 const badgeImg = String.format(image, "http://www.transformice.com/images/x_transformice/x_badges/x_{0}.png");
 const orbScrapper = corsUrl + "https://transformice.fandom.com/wiki/Cartouches";
