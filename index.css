@@ -1,33 +1,264 @@
-.nickname {
-	margin-top: 3em;
-	color: #FFFFFF;
-	font-size: 3.5em;
+.bg
+{
+	background-color: #7A85A6
 }
 
-.box {
-	display: none;
-	margin-top: 3em;
-	background-color: #565B6E;
+.center-code
+{
+	margin: auto;
+	width: 35%;
+}
+
+.code
+{
+	margin-top: 100px;
+	background-color: #FFFFFF;
+	padding: 50px;
+	border-radius: 10px;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+.titletext
+{
+	margin-bottom: 20px;
+}
+
+.name
+{
+	font-family: "Montserrat", sans-serif;
+}
+
+.info
+{
+	font-size: 0.5em;
+	font-family: "Montserrat", sans-serif;
+}
+
+#code
+{
+	width: 100%;
+	height: 40px;
+	font-size: 20px;
+	font-family: "Montserrat", sans-serif;
+	text-align: center;
+	margin-bottom: -7px;
+}
+
+#code:focus
+{
+	outline: none !important;
+}
+
+.link-a801
+{
+	text-decoration: none;
+}
+
+.link-a801:hover
+{
+	color: #000000;
+	text-decoration: underline;
+}
+
+.link-a801:visited
+{
+	color: #000000;
+	text-decoration: none;
+}
+
+.button-search
+{
+	margin-top: 13px;
+	width: 100%;
+	margin-left: 2px;
+	font-family: "Montserrat", sans-serif;
+	height: 40px;
+	background-color: #68718D;
+	border: none;
 	border-radius: 5px;
+	color: #FFFFFF;
+}
+
+.button-search:hover
+{
+	background-color: #9FA5B5;
+	transition: 0.3s;
+}
+
+.center-data
+{
+	width: 100%
+	margin: auto;
+	text-align: center;
+}
+
+#nickname
+{
+	color: #000000;
+	font-size: 2.5em;
+	font-family: "Montserrat", sans-serif;
+}
+
+.nickname
+{
+	background-color: #FFFFFF;
+	opacity: 50%;
 	width: 50%;
+	margin: 0 auto;
+	margin-top: 10px;
+	border-radius: 10px;
+}
+
+.box
+{
+	display: none;
+	margin: 0 auto;
+	margin-top: 10px;
+	background-color: #68718D;
+	border-radius: 5px;
+	width: auto;
+	max-width: 90%;
+	min-width: 50%;
 	padding: 10px;
 }
 
-.visible {
+.small-image
+{
+	max-width: 50px;
+	padding-bottom: 5px;
+}
+
+.counter
+{
+	color: #FFFFFF;
+	font-size: 2em;
+	font-family: "Montserrat", sans-serif;
+}
+
+.visible
+{
 	display: block;
 }
 
-.title {
-	font-weight: bold;
-	color: #BABD2F;
-}
-
-.counter {
-	font-weight: bold;
+table
+{
+	font-family: "Montserrat", sans-serif;
 	color: #FFFFFF;
-	font-size: 2em;
+	text-align: center;
+	width: 100%;
+	margin: 0 auto;
 }
 
-.small-image {
-	max-width: 50px;
+/* Credits */
+.footer
+{
+	margin: 10px;
+	color: #D6DAE5;
+	font-family: Verdana;
+	font-size: 0.8rem;
+	align-content: center;
+}
+
+.credit:after {
+	color: #344473;
+	content: '';
+}
+
+#dev:after
+{
+	animation: fade-out-dev-content 1s 1;
+	-webkit-animation: fade-out-dev-content 1s 1;
+	-moz-animation: fade-out-dev-content 1s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+#dev:hover:after {
+	animation: fade-in-dev-content 1s 1;
+	-webkit-animation: fade-in-dev-content 1s 1;
+	-moz-animation: fade-in-dev-content 1s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+@keyframes fade-out-dev-content {
+	0% {
+		opacity: 1;
+		content: "Bolodefchoco#0000";
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		content: "@Lautenschlager#2555";
+	}
+}
+
+@keyframes fade-in-dev-content {
+	0% {
+		opacity: 1;
+		content: "@Lautenschlager#2555";
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		content: "Bolodefchoco#0000";
+	}
+}
+
+#art:after
+{
+	animation: fade-out-art-content 1s 1;
+	-webkit-animation: fade-out-art-content 1s 1;
+	-moz-animation: fade-out-art-content 1s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+#art:hover:after {
+	animation: fade-in-art-content 1s 1;
+	-webkit-animation: fade-in-art-content 1s 1;
+	-moz-animation: fade-in-art-content 1s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+@keyframes fade-out-art-content {
+	0% {
+		opacity: 1;
+		content: "Dreaams#3546";
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		content: "@Mrelliot#0000";
+	}
+}
+
+@keyframes fade-in-art-content {
+	0% {
+		opacity: 1;
+		content: "@Dreaams#3546";
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		content: "Mrelliot#0000";
+	}
 }

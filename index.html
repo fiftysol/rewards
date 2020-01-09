@@ -5,15 +5,27 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="index.css">
 		<script src="index.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
-	<body bgcolor="#68718D">
-		<div style="display: flex">
-			<input id="code" placeholder="Insert the code here" />
-			<button onclick="search()">Submit</button>
+	<body class="bg">
+		<div class="center-code">
+			<div class="code">
+				<div class="titletext"><span class="name">Find your missing badges, orbs and titles on Transformice</span></div>
+				<input id="code" placeholder="Insert the code here" /><br>
+				<a href="https://atelier801.com/topic?f=5&t=923843" target="_blank" class="link-a801"><span class="info">Don't know how to find the code ? <i class="fa fa-info-circle"></i></span></a>
+				<button class="button-search" onclick="search()">Submit <i class="fa fa-search"></i></button>
+			</div>
 		</div>
-		<span id="nickname" class="nickname"></span>
-		<div id="badges" class="box"></div>
-		<div id="orbs" class="box"></div>
-		<div id="titles" class="box"></div>
+		<div class="center-data">
+			<div class="nickname"><span id="nickname"></span></div>
+			<div id="badges" class="box"></div>
+			<div id="orbs" class="box"></div>
+			<div id="titles" class="box"></div>
+		</div>
+		<div class="center-data footer">
+			Tool by <span class="credit" id="dev"></span>
+			<br>
+			Design by <span class="credit" id="art"></span>
+		</div>
 	</body>
 </html>

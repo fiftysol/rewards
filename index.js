@@ -10,6 +10,16 @@ if (!String.format) {
 let input, nickname, badges, orbs, titles;
 let wiki = { "badges": null, "orbs": null };
 
+let ignore = {
+	"badges": {
+		"162": true
+	},
+	"orbs": {
+		"18": true,
+		"19": true
+	}
+}
+
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
 const hastebinUrl = corsUrl + "https://hastebin.com/raw/";
 
@@ -48,7 +58,7 @@ async function search()
 
 	if (!data.success)
 	{
-		nickname.innerText = "Invalid code";
+		nickname.innerHTML = "Invalid code <i class=\"fa fa-times-circle\"></i>";
 		return;
 	}
 
@@ -89,7 +99,7 @@ async function populateBadges(playerBadges)
 	let isSurv, isRacing;
 
 	for (badge = 0; badge < 350; badge++)
-		if (badge != 162 && !playerBadges[badge]) // 162 == 163
+		if (!ignore["badges"][badge] && !playerBadges[badge]) // 162 == 163
 		{
 			isSurv = (badge >= 120 && badge <= 123);
 			isRacing = (badge >= 124 && badge <= 127);
@@ -120,7 +130,7 @@ async function populateOrbs(playerOrbs)
 
 	let orb, url;
 	for (orb = 1; orb < 100; orb++)
-		if (!playerOrbs[orb])
+		if (!ignore["orbs"][orb] && !playerOrbs[orb])
 		{
 			url = getOrbUrl(orb);
 			if (!url) continue;
@@ -136,7 +146,29 @@ function populateTitles(playersObtainableTitles)
 {
 	startBox(titles);
 
-	titles.innerHTML = String.format(counter, playersObtainableTitles.length) + "<span class=\"title\">«" + playersObtainableTitles.sort().join("»<br>«") + "»</span>";
+	playersObtainableTitles = playersObtainableTitles.sort();
+
+	let row = 0, cel = 0;
+	let titlesTable = [ [ ] ];
+	let realLen = playersObtainableTitles.length - 1;
+
+	for (let t = 0; t < playersObtainableTitles.length; t++)
+	{
+		titlesTable[row][cel++] = "«" + playersObtainableTitles[t] + "»";
+		if (cel == 30 || t == realLen)
+		{
+			titlesTable[row] = "<td>" + titlesTable[row++].join("<br>") + "</td>";
+			titlesTable[row] = [ ];
+			cel = 0;
+		}
+	}
+
+	if (titlesTable[row].length == 0)
+		titlesTable.pop();
+
+	titlesTable = "<table><tr>" + titlesTable.join("\n") + "</tr></table>";
+
+	titles.innerHTML = String.format(counter, playersObtainableTitles.length) + titlesTable;
 }
 
 window.onload = function()
