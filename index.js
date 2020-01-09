@@ -22,6 +22,7 @@ let ignore = {
 
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
 const hastebinUrl = corsUrl + "https://hastebin.com/raw/";
+const pastebinUrl = corsUrl + "https://pastebin.com/raw/";
 
 async function getInfoFromHastebin(code)
 {
@@ -29,7 +30,13 @@ async function getInfoFromHastebin(code)
 
 	try
 	{
-		let body = await fetch(hastebinUrl + code);
+		let body;
+
+		if (code.slice(0, 1) == '#')
+			body = await fetch(pastebinUrl + code.slice(1));
+		else
+			body = await fetch(hastebinUrl + code);
+
 		body = await body.text()
 		playerData = await JSON.parse(body);
 	}
