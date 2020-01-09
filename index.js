@@ -21,8 +21,7 @@ let ignore = {
 }
 
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
-const hastebinUrl = corsUrl + "https://hastebin.com/raw/";
-const pastebinUrl = corsUrl + "https://pastebin.com/raw/";
+const discdbUrl = corsUrl + "http://discbotdb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 async function getInfoFromHastebin(code)
 {
@@ -30,13 +29,7 @@ async function getInfoFromHastebin(code)
 
 	try
 	{
-		let body;
-
-		if (code.slice(0, 1) == '#')
-			body = await fetch(pastebinUrl + code.slice(1));
-		else
-			body = await fetch(hastebinUrl + code);
-
+		let body = await fetch(discdbUrl + code)
 		body = await body.text()
 		playerData = await JSON.parse(body);
 	}
