@@ -21,7 +21,7 @@ let ignore = {
 }
 
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
-const discdbUrl = corsUrl + "http://discbotdb.000webhostapp.com/get?e=json&folder=bottmp&f=";
+const discdbUrl = corsUrl + "https://discbotdb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 async function getInfoFromHastebin(code)
 {
@@ -30,8 +30,7 @@ async function getInfoFromHastebin(code)
 	try
 	{
 		let body = await fetch(discdbUrl + code)
-		body = await body.text()
-		playerData = await JSON.parse(body);
+		playerData = await body.json();
 	}
 	catch(err)
 	{
