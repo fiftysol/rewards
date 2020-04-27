@@ -23,7 +23,7 @@ let ignore = {
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
 const discdbUrl = corsUrl + "https://discbotdb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
-async function getInfoFromHastebin(code)
+async function getInfoFromDiscDb(code)
 {
 	let playerData;
 
@@ -49,14 +49,31 @@ async function getWiki()
 	wiki["orbs"] = await wiki["orbs"].text();
 }
 
-async function search()
+function addLoading(obj)
 {
-	if (!(wiki["badges"] && wiki["orbs"])) return;
+	if (!obj.classList.contains("loading"))
+	{
+		obj.classList.add("loading");
+		return true;
+	}
+	return false;
+}
 
-	let data = await getInfoFromHastebin(input.value);
+function remLoading(obj)
+{
+	if (obj.classList.contains("loading"))
+		obj.classList.remove("loading");
+}
+
+async function search(obj)
+{
+	if (!(wiki["badges"] && wiki["orbs"]) || !addLoading(obj)) return;
+
+	let data = await getInfoFromDiscDb(input.value);
 
 	if (!data.success)
 	{
+		remLoading(obj);
 		nickname.innerHTML = "Invalid code <i class=\"fa fa-times-circle\"></i>";
 		return;
 	}
@@ -66,6 +83,8 @@ async function search()
 	populateBadges(data.badges);
 	populateOrbs(data.orbs);
 	populateTitles(data.titles);
+
+	remLoading(obj);
 }
 
 const image = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
