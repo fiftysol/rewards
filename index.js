@@ -20,7 +20,7 @@ let ignore = {
 	}
 }
 
-const corsUrl = "https://cors.io/?";
+const corsUrl = "https://cors-anywhere.herokuapp.com/";
 const discdbUrl = corsUrl + "https://discbotdb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 async function getInfoFromDiscDb(code)
