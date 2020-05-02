@@ -140,7 +140,10 @@ async function populateBadges(playerBadges)
 				(isSurv ? "Surv_" : (isRacing ? "Racing_" : ''))
 			);
 			if (!url) // When it's not in Wiki but may exist
+			{
+				if (badge <= 260) continue;
 				url = String.format(unsafeImage, String.format(badgeUrlOfficial, badge));
+			}
 			else
 				url = String.format(checkedImage, url[0], badge);;
 
