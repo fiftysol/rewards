@@ -127,7 +127,6 @@ function unsafeBadgeImageError(obj, badgeId)
 	obj.remove();
 	decreaseBadgeCounter();
 	ignore.badges[badgeId] = true;
-	console.log('ignore ' + badgeId);
 }
 
 function setVisible(obj)
