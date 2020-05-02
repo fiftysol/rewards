@@ -92,14 +92,43 @@ async function search(obj)
 }
 
 const checkedImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
-const unsafeImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image hidden\" onload=\"setVisible(this);\" onerror=\"this.remove();\" />"
+const unsafeBadgeImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image hidden\" onload=\"setVisible(this);\" onerror=\"unsafeBadgeImageError(this, {1});\" />"
 
 const badgeUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/{1}Badge_{0}\.png";
 const orbUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
 const badgeUrlOfficial = "http://transformice.com/images/x_transformice/x_badges/x_{0}.png";
 
-const counter = "<span class=\"counter\">Total: {0}</span><br><br>";
+const counter = "<span class=\"counter\">Total: <span id=\"counterNum\">{0}</span></span><br><br>";
+
+function decreaseBadgeCounter()
+{
+	if (!badges.counterLoaded)
+	{
+		if (badges.subtractNumber === undefined)
+			badges.subtractNumber = 0;
+		badges.subtractNumber++;
+	}
+	else
+	{
+		if (badges.subtractNumber)
+		{
+			badges.children.badgesCounter.children[0].children.counterNum.innerText -= ++badges.subtractNumber;
+			delete badges.subtractNumber;
+		}
+		else
+			badges.children.badgesCounter.children[0].children.counterNum.innerText--;
+	}
+}
+
+function unsafeBadgeImageError(obj, badgeId)
+{
+	if (ignore.badges[badgeId]) return;
+	obj.remove();
+	decreaseBadgeCounter();
+	ignore.badges[badgeId] = true;
+	console.log('ignore ' + badgeId);
+}
 
 function setVisible(obj)
 {
@@ -109,10 +138,14 @@ function setVisible(obj)
 		obj.classList.add("visible");
 }
 
-function startBox(obj)
+function startBox(obj, hasChildren)
 {
 	setVisible(obj);
-	obj.innerHTML = '';
+	if (hasChildren)
+		for (let i = 0; i < obj.children.length; i++)
+			obj.children[i].innerHTML = '';
+	else
+		obj.innerHTML = '';
 }
 
 function getBadgeUrl(id, prefix)
@@ -122,7 +155,7 @@ function getBadgeUrl(id, prefix)
 
 async function populateBadges(playerBadges)
 {
-	startBox(badges);
+	startBox(badges, true);
 
 	let missingCounter = 0;
 
@@ -142,16 +175,17 @@ async function populateBadges(playerBadges)
 			if (!url) // When it's not in Wiki but may exist
 			{
 				if (badge <= 260) continue;
-				url = String.format(unsafeImage, String.format(badgeUrlOfficial, badge));
+				url = String.format(unsafeBadgeImage, String.format(badgeUrlOfficial, badge), badge);
 			}
 			else
 				url = String.format(checkedImage, url[0], badge);;
 
 			missingCounter++;
-			badges.innerHTML += url;
+			badges.children.badgesContent.innerHTML += url;
 		}
 
-	badges.innerHTML = String.format(counter, missingCounter) + badges.innerHTML;
+	badges.children.badgesCounter.innerHTML = String.format(counter, missingCounter);
+	badges.counterLoaded = true;
 }
 
 function getOrbUrl(id)
