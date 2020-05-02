@@ -20,7 +20,7 @@ let ignore = {
 	}
 }
 
-const corsUrl = "https://cors-anywhere.herokuapp.com/";
+const corsUrl = "";//"https://cors-anywhere.herokuapp.com/";
 const discdbUrl = corsUrl + "https://discbotdb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 async function getInfoFromDiscDb(code)
@@ -40,15 +40,6 @@ async function getInfoFromDiscDb(code)
 	return playerData;
 }
 
-async function getWiki()
-{
-	wiki["badges"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Badges");
-	wiki["badges"] = await wiki["badges"].text();
-
-	wiki["orbs"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Cartouches");
-	wiki["orbs"] = await wiki["orbs"].text();
-}
-
 function addLoading(obj)
 {
 	if (!obj.classList.contains("loading"))
@@ -63,6 +54,19 @@ function remLoading(obj)
 {
 	if (obj.classList.contains("loading"))
 		obj.classList.remove("loading");
+}
+
+async function getWiki()
+{
+	wiki["badges"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Badges");
+	wiki["badges"] = await wiki["badges"].text();
+
+	wiki["orbs"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Cartouches");
+	wiki["orbs"] = await wiki["orbs"].text();
+
+	let load = document.getElementById("load");
+	remLoading(load);
+	load.innerHTML = "Load <i class=\"fa fa-search\"></i>";
 }
 
 async function search(obj)
@@ -80,25 +84,34 @@ async function search(obj)
 
 	nickname.innerText = data.nickname;
 
-	populateBadges(data.badges);
-	populateOrbs(data.orbs);
 	populateTitles(data.titles);
+	populateOrbs(data.orbs);
+	populateBadges(data.badges);
 
 	remLoading(obj);
 }
 
-const image = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
+const checkedImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
+const unsafeImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image hidden\" onload=\"setVisible(this);\" onerror=\"this.remove();\" />"
 
 const badgeUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/{1}Badge_{0}\.png";
 const orbUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
+const badgeUrlOfficial = "http://transformice.com/images/x_transformice/x_badges/x_{0}.png";
+
 const counter = "<span class=\"counter\">Total: {0}</span><br><br>";
+
+function setVisible(obj)
+{
+	if (obj.classList.contains("hidden"))
+		obj.classList.remove("hidden");
+	else if (!obj.classList.contains("visible"))
+		obj.classList.add("visible");
+}
 
 function startBox(obj)
 {
-	if (!obj.classList.contains("visible"))
-		obj.classList.add("visible");
-
+	setVisible(obj);
 	obj.innerHTML = '';
 }
 
@@ -126,10 +139,13 @@ async function populateBadges(playerBadges)
 				(isSurv ? (badge - 119) : (isRacing ? (badge - 123) : badge)),
 				(isSurv ? "Surv_" : (isRacing ? "Racing_" : ''))
 			);
-			if (!url) continue;
+			if (!url) // When it's not in Wiki but may exist
+				url = String.format(unsafeImage, String.format(badgeUrlOfficial, badge));
+			else
+				url = String.format(checkedImage, url[0], badge);;
 
 			missingCounter++;
-			badges.innerHTML += String.format(image, url[0], badge);
+			badges.innerHTML += url;
 		}
 
 	badges.innerHTML = String.format(counter, missingCounter) + badges.innerHTML;
@@ -154,7 +170,7 @@ async function populateOrbs(playerOrbs)
 			if (!url) continue;
 
 			missingCounter++;
-			orbs.innerHTML += String.format(image, url[0], orb);
+			orbs.innerHTML += String.format(checkedImage, url[0], orb);
 		}
 
 	orbs.innerHTML = String.format(counter, missingCounter) + orbs.innerHTML;

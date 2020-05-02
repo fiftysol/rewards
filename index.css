@@ -1,4 +1,4 @@
- .bg
+.bg
 {
 	background-color: #7A85A6
 }
@@ -127,6 +127,10 @@
 {
 	max-width: 50px;
 	padding-bottom: 5px;
+}
+
+.hidden {
+	display: none;
 }
 
 .counter
