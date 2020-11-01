@@ -1,3 +1,6 @@
+const corsUrl = "https://cors-anywhere.herokuapp.com/";
+const discdbUrl = "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
+
 if (!String.format) {
 	String.format = function(format) {
 		var args = Array.prototype.slice.call(arguments, 1);
@@ -20,20 +23,18 @@ let ignore = {
 	}
 }
 
-const corsUrl = "https://cors-anywhere.herokuapp.com/";
-const discdbUrl = "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
-
 async function getInfoFromDiscDb(code)
 {
 	let playerData;
 
 	try
 	{
-		let body = await fetch(discdbUrl + code)
+		let body = await fetch(discdbUrl + code);
 		playerData = await body.json();
 	}
 	catch(err)
 	{
+		console.log(err);
 		playerData = { "success": false };
 	}
 
@@ -94,8 +95,8 @@ async function search(obj)
 const checkedImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image\" />"
 const unsafeBadgeImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image hidden\" onload=\"setVisible(this);\" onerror=\"unsafeBadgeImageError(this, {1});\" />"
 
-const badgeUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/{1}Badge_{0}\.png";
-const orbUrl = "https://vignette\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
+const badgeUrl = "https://static\.wikia\.nocookie\.net/transformice/images/.+?/.+?/{1}Badge_{0}\.png";
+const orbUrl = "https://static\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
 const badgeUrlOfficial = "http://transformice.com/images/x_transformice/x_badges/x_{0}.png";
 
