@@ -1,4 +1,5 @@
 const corsUrl = "https://cors-anywhere.herokuapp.com/";
+const httpsUrl = "https://images.weserv.nl/?url=";
 const discdbUrl = "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 if (!String.format) {
@@ -98,7 +99,7 @@ const unsafeBadgeImage = "<img src=\"{0}\" alt=\"{1}\" class=\"small-image hidde
 const badgeUrl = "https://static\.wikia\.nocookie\.net/transformice/images/.+?/.+?/{1}Badge_{0}\.png";
 const orbUrl = "https://static\.wikia\.nocookie\.net/transformice/images/.+?/.+?/Macaron_{0}\.png";
 
-const badgeUrlOfficial = "http://transformice.com/images/x_transformice/x_badges/x_{0}.png";
+const badgeUrlOfficial = httpsUrl + "http://transformice.com/images/x_transformice/x_badges/x_{0}.png";
 
 const counter = "<span class=\"counter\">Total: <span id=\"counterNum\">{0}</span></span><br><br>";
 
