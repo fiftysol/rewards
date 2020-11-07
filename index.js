@@ -148,9 +148,9 @@ function startBox(obj, hasChildren)
 		obj.innerHTML = '';
 }
 
-function getBadgeUrl(id, prefix)
+function badgeExists(id, prefix)
 {
-	return wiki["badges"].match(String.format(badgeUrl, id, prefix));
+	return RegExp(String.format(badgeUrl, id, prefix)).test(wiki["badges"]);
 }
 
 async function populateBadges(playerBadges)
@@ -159,7 +159,7 @@ async function populateBadges(playerBadges)
 
 	let missingCounter = 0;
 
-	let badge, url;
+	let badge, url, isSafeBadge, officialUrl;
 	let isSurv, isRacing;
 
 	for (badge = 0; badge < 350; badge++)
@@ -168,20 +168,16 @@ async function populateBadges(playerBadges)
 			isSurv = (badge >= 120 && badge <= 123);
 			isRacing = (badge >= 124 && badge <= 127);
 
-			url = getBadgeUrl(
+			isSafeBadge = badgeExists(
 				(isSurv ? (badge - 119) : (isRacing ? (badge - 123) : badge)),
 				(isSurv ? "Surv_" : (isRacing ? "Racing_" : ''))
 			);
-			if (!url) // When it's not in Wiki but may exist
-			{
-				if (badge <= 260) continue;
-				url = String.format(unsafeBadgeImage, String.format(badgeUrlOfficial, badge), badge);
-			}
-			else
-				url = String.format(checkedImage, url[0], badge);;
+
+			officialUrl = String.format(badgeUrlOfficial, badge); // avoids quality loss
 
 			missingCounter++;
-			badges.children.badgesContent.innerHTML += url;
+			badges.children.badgesContent.innerHTML +=
+				String.format(isSafeBadge ? checkedImage : unsafeBadgeImage, officialUrl, badge);
 		}
 
 	badges.children.badgesCounter.innerHTML = String.format(counter, missingCounter);
