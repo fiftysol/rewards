@@ -154,7 +154,7 @@ function badgeExists(id, prefix)
 	return RegExp(String.format(badgeUrl, id, prefix)).test(wiki["badges"]);
 }
 
-async function populateBadges(playerBadges)
+async function populateBadges(playerBadges, ignoreSafaCheck = false)
 {
 	startBox(badges, true);
 
@@ -169,7 +169,7 @@ async function populateBadges(playerBadges)
 			isSurv = (badge >= 120 && badge <= 123);
 			isRacing = (badge >= 124 && badge <= 127);
 
-			isSafeBadge = badgeExists(
+			isSafeBadge = ignoreSafaCheck ? false : badgeExists(
 				(isSurv ? (badge - 119) : (isRacing ? (badge - 123) : badge)),
 				(isSurv ? "Surv_" : (isRacing ? "Racing_" : ''))
 			);
@@ -247,5 +247,18 @@ window.onload = function()
 	orbs = document.getElementById("orbs");
 	titles = document.getElementById("titles");
 
-	getWiki();
+	let queryBadges = document.location.search.match(/[?&]badges=([^&]+)/);
+	if (queryBadges)
+	{
+		queryBadges = queryBadges[1];
+		queryBadges = queryBadges.split(',');
+
+		let playerBadges = { };
+		for (let badge of queryBadges)
+			playerBadges[badge] = true;
+
+		populateBadges(playerBadges, true);
+	}
+	else
+		getWiki();
 }
