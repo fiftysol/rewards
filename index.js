@@ -1,4 +1,4 @@
-const corsUrl = "https://cors-anywhere.herokuapp.com/";
+const corsUrl = "https://bolo-cors.herokuapp.com/";
 const httpsUrl = "https://images.weserv.nl/?url=";
 const discdbUrl = "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
