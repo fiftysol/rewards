@@ -1,6 +1,6 @@
 const corsUrl = "https://bolo-cors.herokuapp.com/";
 const httpsUrl = "https://images.weserv.nl/?url=";
-const discdbUrl = "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
+const discdbUrl = corsUrl + "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 if (!String.format) {
 	String.format = function(format) {
