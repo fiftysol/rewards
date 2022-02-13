@@ -163,7 +163,7 @@ async function populateBadges(playerBadges, ignoreSafaCheck = false)
 	let badge, url, isSafeBadge, officialUrl;
 	let isSurv, isRacing;
 
-	for (badge = 0; badge < 350; badge++)
+	for (badge = 0; badge < 400; badge++)
 		if (!ignore["badges"][badge] && !playerBadges[badge]) // 162 == 163
 		{
 			isSurv = (badge >= 120 && badge <= 123);
