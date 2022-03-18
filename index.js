@@ -1,6 +1,6 @@
-const corsUrl = "https://cors-anywhere.herokuapp.com/";
+const corsUrl = "https://bolo-cors.herokuapp.com/";
 const httpsUrl = "https://images.weserv.nl/?url=";
-const discdbUrl = "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
+const discdbUrl = corsUrl + "https://discorddb.000webhostapp.com/get?e=json&folder=bottmp&f=";
 
 if (!String.format) {
 	String.format = function(format) {
@@ -63,7 +63,7 @@ async function getWiki()
 	wiki["badges"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Badges");
 	wiki["badges"] = await wiki["badges"].text();
 
-	wiki["orbs"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Cartouches");
+	wiki["orbs"] = await fetch(corsUrl + "https://transformice.fandom.com/wiki/Cartouche");
 	wiki["orbs"] = await wiki["orbs"].text();
 
 	let load = document.getElementById("load");
@@ -154,7 +154,7 @@ function badgeExists(id, prefix)
 	return RegExp(String.format(badgeUrl, id, prefix)).test(wiki["badges"]);
 }
 
-async function populateBadges(playerBadges)
+async function populateBadges(playerBadges, ignoreSafaCheck = false)
 {
 	startBox(badges, true);
 
@@ -163,13 +163,13 @@ async function populateBadges(playerBadges)
 	let badge, url, isSafeBadge, officialUrl;
 	let isSurv, isRacing;
 
-	for (badge = 0; badge < 350; badge++)
+	for (badge = 0; badge < 400; badge++)
 		if (!ignore["badges"][badge] && !playerBadges[badge]) // 162 == 163
 		{
 			isSurv = (badge >= 120 && badge <= 123);
 			isRacing = (badge >= 124 && badge <= 127);
 
-			isSafeBadge = badgeExists(
+			isSafeBadge = ignoreSafaCheck ? false : badgeExists(
 				(isSurv ? (badge - 119) : (isRacing ? (badge - 123) : badge)),
 				(isSurv ? "Surv_" : (isRacing ? "Racing_" : ''))
 			);
@@ -247,5 +247,18 @@ window.onload = function()
 	orbs = document.getElementById("orbs");
 	titles = document.getElementById("titles");
 
-	getWiki();
+	let queryBadges = document.location.search.match(/[?&]badges=([^&]+)/);
+	if (queryBadges)
+	{
+		queryBadges = queryBadges[1];
+		queryBadges = queryBadges.split(',');
+
+		let playerBadges = { };
+		for (let badge of queryBadges)
+			playerBadges[badge] = true;
+
+		populateBadges(playerBadges, true);
+	}
+	else
+		getWiki();
 }
